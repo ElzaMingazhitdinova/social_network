@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Posts</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="vue">
+    <table align="center" cellspacing="3"><tbody>
+    <div class="large-12 medium-12 small-12 cell">
+        <tr>
+            <td><input v-model="search" type="text" placeholder='категория'  /></td>
+            <td><button v-on:click="pushCategorySearch()">Введите категорию</button></td>
+        </tr>
+
+        <td><input type="text" placeholder='пользователь'  /></td><td><button type="button">Введите пользователя</button></td>
+    </div>
+    </tbody></table>
+    <div style="text-align:center; margin:0 auto;">
+    <select align="center" v-model="selected" @change="onSortingChange(selected)"><option v-for="s in sortingList">{{ s }}</option></select>
+
+    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell"><tr><th>Post</th><th>Author</th><th>Category</th><th>Date</th></tr>
+
+        <tr v-for="post in postList">
+            <td align="left">{{post.post}}</td>
+            <td><a v-bind:href="'localhost:8080/user?name='+ post.author">{{post.author}}</a></td>
+            <td><a v-bind:href="'localhost:8080/category?name='+ post.category">{{post.category}}</a></td>
+            <td>{{post.date}}</td>
+        </tr>
+
+    </div>
+    </tbody></table>
+</div>
+<script type="text/javascript">
+        const API_URL = 'http://127.0.0.1:8080';
+        const router = new VueRouter({
+          mode: 'history',
+          routes: [
+          ]
+        });
+        var app = new Vue({
+            el:'#vue',
+            data() {
+                return {
+                    search: "",
+                    post: null,
+                    postList: [],
+                    sortingList: [],
+                    selected: "",
+                  };
+              },
+              computed: {
+              },
+              mounted() {
+                  this.getSortings()
+                  this.getPostList("")
+              },
+              methods: {
+                  async getSortings(){
+                      const sortingListResp = await this.sortingListRequest();
+                      this.sortingList = sortingListResp.data.response;
+                      this.selected = this.sortingList[0];
+                  },
+
+                  async getPostList(sorting) {
+                      const postListResp = await this.postListRequest(sorting);
+                      this.postList = postListResp.data.response;
+                  },
+
+                  async onSortingChange(sorting) {
+                      console.log(sorting);
+                      this.getPostList(sorting);
+                      console.log(this.postList);
+                  },
+
+                  sortingListRequest() {
+                      return axios({
+                          method: 'get',
+                          url: API_URL + '/sorting/list',
+                          responseType: 'json',
+                      })
+                  },
+
+                  postListRequest(sorting) {
+                      if (sorting != ""){
+                          sorting = "&sorting="+sorting
+                      }
+                      return axios({
+                          method: 'get',
+                          url: API_URL + '/post/list?id=1'+sorting,
+                          responseType: 'json',
+                      })
+                  },
+                  pushCategorySearch() {
+                    window.open('/category/list/page?contains='+this.search);
+                  }
+              }
+          });
+        </script>
+</body>
+</html>

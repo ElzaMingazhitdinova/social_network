@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Categories search</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="vue">
+    <h1 align="center">Search by: "{{search}}"</h1><br>
+    <table align="center" cellspacing="3"><tbody>
+    </tbody></table>
+    <div style="text-align:center; margin:0 auto;">
+    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell">
+
+        <tr v-for="category in categoryList">
+            <td><a v-bind:href="'localhost:8080/category?name='+ category">{{category}}</a></td>
+        </tr>
+
+    </div>
+    </tbody></table>
+    </div>
+    <script type="text/javascript">
+        const API_URL = 'http://127.0.0.1:8080';
+        var app = new Vue({
+            el:'#vue',
+            data() {
+                return {
+                    search: "%s",
+                    categoryList: [],
+                  };
+              },
+              computed: {
+              },
+              mounted() {
+                  this.getCategoryList("")
+              },
+              methods: {
+                  async getCategoryList(){
+                      const categoryListResp = await this.categoryListRequest();
+                      this.categoryList = categoryListResp.data.response;
+                  },
+
+                  categoryListRequest() {
+                      return axios({
+                          method: 'get',
+                          url: API_URL + '/category/list?contains='+this.search,
+                          responseType: 'json',
+                      })
+                  },
+
+              }
+          });
+        </script>
+</body>
+</html>

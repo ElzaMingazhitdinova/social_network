@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 
-//@RestController
+@RestController
 //@CrossOrigin
 public class HomeController {
     @Autowired

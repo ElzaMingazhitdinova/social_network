@@ -1,4 +1,4 @@
-package com.example.testingrestdocs;
+package com.example.testingrestdocs.service;
 
 
 import com.example.testingrestdocs.objects.User;

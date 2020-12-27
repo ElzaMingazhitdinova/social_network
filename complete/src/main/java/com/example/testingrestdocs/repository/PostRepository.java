@@ -1,29 +1,48 @@
-package com.example.testingrestdocs;
+package com.example.testingrestdocs.repository;
 
 
 import com.example.testingrestdocs.objects.Category;
 import com.example.testingrestdocs.objects.Post;
 import com.example.testingrestdocs.objects.User;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class PostRepository {
     private Map<Long, Post> postMap;
     private Map<Category, List<Long>> categoryIndexMap;
     private Map<User, List<Long>> userIndexMap;
+    private Map<String, Long> nameIndexMap;
 
-    public PostRepository() {
+    public final NamedParameterJdbcTemplate jdbcTemplate;
+    RowMapper<Post> rowMapper = (resultSet, i) -> {
+        String text = resultSet.getString("text");
+       // Long userId = resultSet.getLong("userId");
+        //Long categoryId = resultSet.getLong("categoryId");
+        //Long commentId = resultSet.getLong("commentId");
+        Date date = resultSet.getDate("date");
+        Long id = resultSet.getLong("id");
+        return new Post(id, null, text, date, null, null);
+    };
+
+    public PostRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
         this.postMap = new HashMap<>();
-        this.categoryIndexMap = new HashMap<>();
         this.userIndexMap = new HashMap<>();
     }
 
-    public void createPost(Post post) {
+    public void CategoryRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.categoryIndexMap = new HashMap<>();
+        this.nameIndexMap = new HashMap<>();
+    }
+
+    /*public void createPost(Post post) {
         List<Long> categoryPostIds = categoryIndexMap.get(post.getCategory());
         List<Long> userPostIds = userIndexMap.get(post.getUser());
 
@@ -39,6 +58,17 @@ public class PostRepository {
         postMap.put(post.getId(), post);
         categoryIndexMap.put(post.getCategory(), categoryPostIds);
         userIndexMap.put(post.getUser(), userPostIds);
+    }*/
+
+    public void savePost(Post post) {
+        postMap.put(post.getId(), post);
+        nameIndexMap.put(post.getText(), post.getId());
+
+        SqlParameterSource params = params(post);
+        new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate())
+                .withTableName("post")
+                .usingColumns(params.getParameterNames())
+                .execute(params);
     }
 
     public void updatePost(Post post) {
@@ -77,5 +107,13 @@ public class PostRepository {
             posts.add(postMap.get(id));
         }
         return posts;
+    }
+
+    private MapSqlParameterSource params(Post post) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        Optional.ofNullable(post.getId()).ifPresent(id -> params.addValue("id", id));
+        Optional.ofNullable(post.getText()).ifPresent(text -> params.addValue("text", text));
+        Optional.ofNullable(post.getDateTime()).ifPresent(date -> params.addValue("date", date));
+        return params;
     }
 }

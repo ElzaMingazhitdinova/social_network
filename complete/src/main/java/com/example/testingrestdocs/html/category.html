@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,7 +9,15 @@
 </head>
 <body>
 <div id="vue">
-    <h1 align="center">Category: {{category}}</h1><br>
+    <button align="center" v-on:click="sendSubscribe()">Выйти</button>
+    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell">
+        <tr><td><h1 align="center">Category: {{category}}</h1><br></td>
+            <td><td><button v-if="subscription" v-on:click="sendUnsubscribe()">Отписаться</button>
+                <button v-else v-on:click="sendSubscribe()">Подписаться</button>
+            </td></td>
+        </tr>
+    </div></tbody></table>
+
     <div style="text-align:center; margin:0 auto;">
     <select v-model="selected" @change="onSortingChange(selected)"><option v-for="s in sortingList">{{ s }}</option></select>
 
@@ -33,6 +41,7 @@
                 return {
                     category: "%s",
                     post: null,
+                    subscription: false,
                     postList: [],
                     sortingList: [],
                     selected: "",
@@ -79,6 +88,14 @@
                           url: API_URL + '/post/list?category='+this.category+'&id=1'+sorting,
                           responseType: 'json',
                       })
+                  },
+
+                  sendSubscribe() {
+                    this.subscription = true;
+                  },
+
+                  sendUnsubscribe() {
+                    this.subscription = false;
                   }
               }
           });

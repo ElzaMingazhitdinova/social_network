@@ -10,33 +10,14 @@
 </head>
 <body>
 <div id="vue">
-    <table align="center" cellspacing="3"><tbody>
-    <div class="large-12 medium-12 small-12 cell">
-        <tr>
-            <td><input v-model="search_cat" type="text" placeholder='категория'  /></td>
-            <td><button v-on:click="pushCategorySearch()">Введите категорию</button></td>
-        </tr>
+    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell">
+        <tr><th>Post</th><th>Author</th><th>Category</th><th>Date</th></tr>
 
-        <td><input v-model="search_user" placeholder='пользователь'/></td>
-        <td><button v-on:click="pushUserSearch()">Введите пользователя</button></td>
-    </div>
-    </tbody></table>
-    <div style="text-align:center; margin:0 auto;">
-    <select align="center" v-model="selected" @change="onSortingChange(selected)"><option v-for="s in sortingList">{{ s }}</option></select>
+        <td>{{post.post}}</td><td>{{post.author}}</td><td>{{post.category}}</td><td>{{post.date}}</td>
 
-    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell"><tr><th>Post</th><th>Author</th><th>Category</th><th>Date</th></tr>
-
-        <tr v-for="post in postList">
-            <td align="left"><a v-bind:href="'localhost:8080/post/page?id='+ post.id">{{post.post}}</a></td>
-            <td><a v-bind:href="'localhost:8080/user?name='+ post.author">{{post.author}}</a></td>
-            <td><a v-bind:href="'localhost:8080/category?name='+ post.category">{{post.category}}</a></td>
-            <td>{{post.date}}</td>
-        </tr>
-
-    </div>
-    </tbody></table>
+    </div></tbody></table>
 </div>
-<script type="text/javascript">
+    <script type="text/javascript">
         const API_URL = 'http://127.0.0.1:8080';
         const router = new VueRouter({
           mode: 'history',

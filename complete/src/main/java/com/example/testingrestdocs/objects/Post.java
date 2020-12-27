@@ -10,10 +10,10 @@ public class Post {
     private User user;
     private Date dateTime;
     private Category category;
-    private ArrayList<String> materials;
-    private HashMap<Characteristic, ArrayList<String>> marks;
-    public ArrayList<Comment> comments;
-    private boolean blocked;
+    //private ArrayList<String> materials;
+   // private HashMap<Characteristic, ArrayList<String>> marks;
+    //public ArrayList<Comment> comments;
+    private boolean blocked; // сделать проверку на то что пост заблокирован и что его ен надо воозращать
 
     public User getUser() {
         return user;
@@ -30,10 +30,10 @@ public class Post {
         this.text = text;
         this.dateTime = dateTime;
         this.category = category;
-        materials = new ArrayList<>();
-        marks = new HashMap<>();
+      //  materials = new ArrayList<>();
+      //  marks = new HashMap<>();
         for (Characteristic characteristic : category.getCharacteristics()) {
-            marks.put(characteristic, new ArrayList<>());
+       //     marks.put(characteristic, new ArrayList<>());
         }
         comments = new ArrayList<>();
         blocked = false;
@@ -45,16 +45,16 @@ public class Post {
 
     public void setCategory(Category category) {
         for (Characteristic characteristic : this.category.getCharacteristics()) {
-            marks.remove(characteristic);
+        //    marks.remove(characteristic);
         }
         this.category = category;
     }
 
-    public ArrayList<String> getMaterials() {
+   /*public ArrayList<String> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(ArrayList<String> materials) {
+   /* public void setMaterials(ArrayList<String> materials) {
         this.materials = materials;
     }
 
@@ -104,7 +104,7 @@ public class Post {
 
     public void addComment(Comment comment) {
         comments.add(comment);
-    }
+    }*/
 
     public boolean isBlocked() {
         return blocked;

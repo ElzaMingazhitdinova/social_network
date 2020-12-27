@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body><div id="vue">
+    <table align="center" cellspacing="3"><tbody><div class="large-12 medium-12 small-12 cell">
+        <tr><td><input type="text" size="30" v-model="username" placeholder="Username"/></td></tr>
+
+        <tr><td><input type="text" size="30" v-model="password" placeholder="Password"/></td></tr>
+
+        <tr><td><button v-on:click="pushCategorySearch()">Login</button></td></tr>
+    </div></tbody></table>
+    <br><br>
+    <table align="center" cellspacing="3"><tbody><div class="large-12 medium-12 small-12 cell">
+        <tr><td><input type="text" size="30" v-model="email" placeholder="Email"/></td></tr>
+
+        <tr><td><input type="text" size="30" v-model="username" placeholder="Username"/></td></tr>
+
+        <tr><td><input type="text" size="30" v-model="password" placeholder="Password"/></td></tr>
+
+        <tr><td><button v-on:click="pushCategorySearch()">Register</button></td></tr>
+    </div></tbody></table>
+
+</div>
+<script type="text/javascript">
+        const API_URL = 'http://127.0.0.1:8080';
+        const router = new VueRouter({
+          mode: 'history',
+          routes: []
+        });
+        var app = new Vue({
+            el:'#vue',
+            data() {
+                return {
+                };
+              },
+              computed: {
+              },
+              mounted() {
+              },
+              methods: {
+                  async onSortingChange(sorting) {
+                      console.log(sorting);
+                      this.getPostList(sorting);
+                      console.log(this.postList);
+                  },
+                  pushCategorySearch() {
+                    window.open('/category/list/page?contains='+this.search_cat);
+                  },
+                  pushUserSearch() {
+                    window.open('/user/list/page?contains='+this.search_user);
+                  }
+              }
+          });
+        </script>
+</body>
+</html>

@@ -13,14 +13,14 @@
     <table align="center" cellspacing="3"><tbody>
     </tbody></table>
     <div style="text-align:center; margin:0 auto;">
-    <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell">
+        <table align="center" cellspacing="30"><tbody><div class="large-12 medium-12 small-12 cell">
 
-        <tr v-for="category in categoryList">
-            <td><a v-bind:href="'localhost:8080/category?name='+ category">{{category}}</a></td>
-        </tr>
+            <tr v-for="user in userList">
+                <td><a v-bind:href="'localhost:8080/user?name='+ user">{{user}}</a></td>
+            </tr>
 
-    </div>
-    </tbody></table>
+        </div>
+        </tbody></table>
     </div>
     <script type="text/javascript">
         const API_URL = 'http://127.0.0.1:8080';
@@ -29,24 +29,24 @@
             data() {
                 return {
                     search: "%s",
-                    categoryList: [],
+                    userList: [],
                   };
               },
               computed: {
               },
               mounted() {
-                  this.getCategoryList("")
+                  this.getUserList("")
               },
               methods: {
-                  async getCategoryList(){
-                      const categoryListResp = await this.categoryListRequest();
-                      this.categoryList = categoryListResp.data.response;
+                  async getUserList(){
+                      const userListResp = await this.userListRequest();
+                      this.userList = userListResp.data.response;
                   },
 
-                  categoryListRequest() {
+                  userListRequest() {
                       return axios({
                           method: 'get',
-                          url: API_URL + '/category/list?contains='+this.search,
+                          url: API_URL + '/user/list?contains='+this.search,
                           responseType: 'json',
                       })
                   },

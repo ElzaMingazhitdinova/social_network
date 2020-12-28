@@ -4,6 +4,7 @@ package com.example.testingrestdocs.service;
 
 import com.example.testingrestdocs.objects.Category;
 import com.example.testingrestdocs.objects.Post;
+import com.example.testingrestdocs.objects.User;
 import com.example.testingrestdocs.repository.PostRepository;
 import com.example.testingrestdocs.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,17 @@ public class UserService {
     @Autowired
     private PostFinderService postFinderService;
 
-    public List<Post> GetUserWithPost(Long id) {
-       return postFinderService.findByUser(id);
+
+    public void addUser(User user){
+        userRepository.createUser(user);
     }
+
+    public User getUserById(Long id){
+        return userRepository.getUser(id);
+    }
+
+    /*public List<Post> GetUserWithPost(Long id) {
+       return postFinderService.findByUser(id);
+    }*/
 
 }

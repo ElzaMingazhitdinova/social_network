@@ -1,9 +1,10 @@
 package com.example.testingrestdocs.repository;
 
-
-import com.example.testingrestdocs.objects.Category;
 import com.example.testingrestdocs.objects.Post;
 import com.example.testingrestdocs.objects.User;
+import jdk.nashorn.api.scripting.JSObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,29 +17,27 @@ import java.util.*;
 @Repository
 public class PostRepository {
     private Map<Long, Post> postMap;
-    private Map<Category, List<Long>> categoryIndexMap;
-    private Map<User, List<Long>> userIndexMap;
     private Map<String, Long> nameIndexMap;
+    @Autowired
+    private UserRepository userRepository;
 
     public final NamedParameterJdbcTemplate jdbcTemplate;
     RowMapper<Post> rowMapper = (resultSet, i) -> {
         String text = resultSet.getString("text");
-       // Long userId = resultSet.getLong("userId");
-        //Long categoryId = resultSet.getLong("categoryId");
-        //Long commentId = resultSet.getLong("commentId");
+        Long userid = resultSet.getLong("userid");
+        Boolean blocked = resultSet.getBoolean("blocked");
         Date date = resultSet.getDate("date");
         Long id = resultSet.getLong("id");
-        return new Post(id, null, text, date, null, null);
+        return new Post(id, userid, text, date,  blocked, null);
     };
 
     public PostRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.postMap = new HashMap<>();
-        this.userIndexMap = new HashMap<>();
+        this.nameIndexMap = new HashMap<>();
     }
 
     public void CategoryRepository(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.categoryIndexMap = new HashMap<>();
         this.nameIndexMap = new HashMap<>();
     }
 
@@ -60,7 +59,7 @@ public class PostRepository {
         userIndexMap.put(post.getUser(), userPostIds);
     }*/
 
-    public void savePost(Post post) {
+    public void createPost(Post post) {
         postMap.put(post.getId(), post);
         nameIndexMap.put(post.getText(), post.getId());
 
@@ -71,7 +70,27 @@ public class PostRepository {
                 .execute(params);
     }
 
-    public void updatePost(Post post) {
+    public Post getPost(Long id) {
+        String query = "select * from post as p " +
+                "where p.id=:id";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        return DataAccessUtils.singleResult(jdbcTemplate.query(query, params, rowMapper));
+    }
+
+    public JSObject getPostWithCommentsAndUser(Long id) {
+        String query = "SELECT p.*, c.*, u.username" +
+                "FROM public.post as p" +
+                "inner join public.user as u on u.id= p.userid" +
+                "inner join comment as c on c.postid=p.id" +
+                "where p.id=:id";
+       MapSqlParameterSource params = new MapSqlParameterSource();
+
+        params.addValue("id", id);
+        return JSObject;
+    }
+
+  /*  public void updatePost(Post post) {
         postMap.put(post.getId(), post);
         List<Long> ids = categoryIndexMap.get(post.getCategory());
         ids.add(post.getId());
@@ -108,12 +127,14 @@ public class PostRepository {
         }
         return posts;
     }
-
+*/
     private MapSqlParameterSource params(Post post) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         Optional.ofNullable(post.getId()).ifPresent(id -> params.addValue("id", id));
+        Optional.ofNullable(post.getIdUser()).ifPresent(userid -> params.addValue("userid", userid));
         Optional.ofNullable(post.getText()).ifPresent(text -> params.addValue("text", text));
         Optional.ofNullable(post.getDateTime()).ifPresent(date -> params.addValue("date", date));
+        Optional.ofNullable(post.isBlocked()).ifPresent(blocked -> params.addValue("blocked", blocked));
         return params;
     }
 }

@@ -3,6 +3,7 @@ package com.example.testingrestdocs.repository;
 
 import com.example.testingrestdocs.objects.Category;
 import com.example.testingrestdocs.objects.Post;
+
 import com.example.testingrestdocs.objects.User;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,10 +27,20 @@ public class UserRepository {
         String username = resultSet.getString("username");
         String phone = resultSet.getString("phone");
         String email = resultSet.getString("email");
-        String clientToken = resultSet.getString("clientToken");
+        String clienttoken = resultSet.getString("clienttoken");
         Long id = resultSet.getLong("id");
-        return new User(id, username, phone, email, clientToken);
+        return new User(id, username, clienttoken,email, phone);
     };
+
+    private MapSqlParameterSource params(User user) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        Optional.ofNullable(user.getId()).ifPresent(id -> params.addValue("id", id));
+        Optional.ofNullable(user.getUsername()).ifPresent(username -> params.addValue("username", username));
+        Optional.ofNullable(user.getPhone()).ifPresent(phone -> params.addValue("phone", phone));
+        Optional.ofNullable(user.getEmail()).ifPresent(email -> params.addValue("email", email));
+        Optional.ofNullable(user.getClientToken()).ifPresent(clienttoken -> params.addValue("clienttoken", clienttoken));
+        return params;
+    }
 
     public UserRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -40,28 +51,23 @@ public class UserRepository {
     public void createUser(User user) {
         userMap.put(user.getId(), user);
         nameIndexMap.put(user.getUsername(), user.getId());
+
         SqlParameterSource params = params(user);
+        System.out.println(params);
         new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate())
-                .withTableName("user")
+                .withTableName("public.\"user\"")
                 .usingColumns(params.getParameterNames())
                 .execute(params);
     }
 
-    public User findUser(Long id) {
-        String query = "SELECT * FROM USER "   +
-                "WHERE ID=:ID";
+
+    public User getUser(Long id) {
+        String query = "select * from public.\"user\" as u " +
+                "where u.id=:id";
+        System.out.println("id = " + id);
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
+        System.out.println("params = " + params);
         return DataAccessUtils.singleResult(jdbcTemplate.query(query, params, rowMapper));
-    }
-
-    private MapSqlParameterSource params(User user) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        Optional.ofNullable(user.getId()).ifPresent(id -> params.addValue("id", id));
-        Optional.ofNullable(user.getUsername()).ifPresent(username -> params.addValue("username", username));
-        Optional.ofNullable(user.getPhone()).ifPresent(phone -> params.addValue("phone", phone));
-        Optional.ofNullable(user.getEmail()).ifPresent(email -> params.addValue("username", email));
-        Optional.ofNullable(user.getClientToken()).ifPresent(clientToken -> params.addValue("clientToken", clientToken));
-        return params;
     }
 }

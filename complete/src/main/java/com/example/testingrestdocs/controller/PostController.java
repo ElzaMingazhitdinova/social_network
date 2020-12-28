@@ -42,10 +42,17 @@ public class PostController {
     }
 
     //логика
-    @RequestMapping(value = "/post/create", method = RequestMethod.POST)
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        return new ResponseEntity<>(PostFinderService.createNewPost(post), HttpStatus.OK);
+    @PostMapping(value = "/post/create")
+    public void createPost(@RequestBody Post post) {
+
+        postFinderService.createNewPost(post);
     }
+
+    @RequestMapping(path = "/post/{id}", method = RequestMethod.GET)
+    public Post getPostById(@PathVariable Long id) {
+        return postFinderService.getPost(id);
+    }
+
 
     public String fileToString(String filename) {
         StringBuilder sb = new StringBuilder();

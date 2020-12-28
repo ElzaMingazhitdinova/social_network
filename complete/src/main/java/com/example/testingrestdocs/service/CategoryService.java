@@ -21,15 +21,14 @@ public class CategoryService {
     }
 
     public List<Post> GetCategoryWithPosts(Long id) {
-
-        return postFinderService.findByCategory(id);
+        return categoryRepository.findCategoryWithPosts(id);
        // return this.storage.GetCategory(cID);
     }
 
     public List<Category> findAllCategories() {
         return categoryRepository.findAllCategories();
     }
-
+/*
     public String subscribeToCategory(Category category) throws Exception {
         String status = "";
         if (!postFinderService.findByCategory(category.getId()).isEmpty()) {
@@ -38,5 +37,5 @@ public class CategoryService {
             status = "NOT OK";
         }
         return status;
-    }
+    }*/
 }

@@ -3,12 +3,13 @@ package com.example.testingrestdocs.objects;
 import java.util.ArrayList;
 
 public class Characteristic {
+    private Long id;
     private String name;
-    private CharacteristicType type;
-    private ArrayList<String> variants;
+    private String type;
+    //private ArrayList<String> variants;
     private boolean refillable;
 
-    private void checkVariant(String variant) throws IllegalArgumentException {
+  /*  private void checkVariant(String variant) throws IllegalArgumentException {
         switch (type) {
             case INTEGER: {
                 try {
@@ -34,15 +35,16 @@ public class Characteristic {
             checkVariant(variant);
         }
     }
-
-    public Characteristic(String name, CharacteristicType type) {
+*/
+    public Characteristic(Long id, String name, String type, boolean refillable) {
+        this.id = id;
         this.name = name;
         this.type = type;
-        this.variants = new ArrayList<>();
+      //  this.variants = new ArrayList<>();
         this.refillable = false;
     }
 
-    @Override
+  /*  @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -53,8 +55,8 @@ public class Characteristic {
             return false;
         if (type != other.type)
             return false;
-        if (!variants.equals(other.variants))
-            return false;
+      //  if (!variants.equals(other.variants))
+       //     return false;
         return refillable == other.refillable;
     }
 
@@ -65,28 +67,30 @@ public class Characteristic {
         result = 31 * result + type.toString().hashCode();
         result = 31 * result + ((Boolean) refillable).hashCode();
         return result;
-    }
+    }*/
 
-    public Characteristic(String name, CharacteristicType type, boolean refillable) {
-        this.name = name;
-        this.type = type;
-        this.variants = new ArrayList<String>();
-        this.refillable = refillable;
-    }
 
     public String getName() {
         return name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId() {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public CharacteristicType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(CharacteristicType type) {
+  /*  public void setType(CharacteristicType type) {
         this.type = type;
         try {
             checkVariants(variants);
@@ -113,7 +117,7 @@ public class Characteristic {
         checkVariant(variant);
         this.variants.add(variant);
     }
-
+*/
     public boolean isRefillable() {
         return refillable;
     }

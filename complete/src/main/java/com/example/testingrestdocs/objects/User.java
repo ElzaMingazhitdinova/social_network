@@ -6,15 +6,15 @@ public class User {
     private String username;
     private String phone;
     private String email;
-    private String clientToken;
+    private String clienttoken;
 
 
-    public User(Long id, String name, String phone, String email, String clientToken) {
+    public User(Long id, String name, String phone, String email, String clienttoken) {
         this.id = id;
         this.username = name;
         this.phone = phone;
         this.email = email;
-        this.clientToken = clientToken;
+        this.clienttoken = clienttoken;
     }
 
     public Long getId() {
@@ -22,11 +22,11 @@ public class User {
     }
 
     public String getClientToken() {
-        return clientToken;
+        return clienttoken;
     }
 
-    public void setClientToken(String clientToken) {
-        this.clientToken = clientToken;
+    public void setClientToken(String clienttoken) {
+        this.clienttoken = clienttoken;
     }
 
     public String getUsername() {

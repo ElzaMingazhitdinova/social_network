@@ -7,15 +7,15 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    private ArrayList<Post> posts;
-    private ArrayList<Characteristic> characteristics;
+   // private ArrayList<Post> posts;
+   // private ArrayList<Characteristic> characteristics;
 
-    public Category(Long id, String name, String description, ArrayList posts ,ArrayList characteristics ) {
+    public Category(Long id, String name, String description ) {
         this.name = name;
         this.id = id;
         this.description = description;
-        this.posts = new ArrayList<>();
-        this.characteristics = new ArrayList<>();
+       // this.posts = new ArrayList<>();
+        //this.characteristics = new ArrayList<>();
     }
 
    /* @Override
@@ -57,18 +57,18 @@ public class Category {
         this.description = description;
     }
 
-    public ArrayList<Post> getPosts() {
+   /* public ArrayList<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(ArrayList<Post> posts) throws IllegalArgumentException {
+   /* public void setPosts(ArrayList<Post> posts) throws IllegalArgumentException {
         for (Post post : posts) {
             if (!equals(post.getCategory())) {
                 throw new IllegalArgumentException("Post category not equals this category");
             }
         }
         this.posts = posts;
-    }
+    }*/
 
     /*public void addPost(Post post) throws IllegalArgumentException {
         if (post.getCategory() != this) {
@@ -77,7 +77,7 @@ public class Category {
         posts.add(post);
     }*/
 
-    public ArrayList<Characteristic> getCharacteristics() {
+  /*  public ArrayList<Characteristic> getCharacteristics() {
         return characteristics;
     }
 
@@ -87,6 +87,6 @@ public class Category {
 
     public void addCharacteristic(Characteristic characteristic) {
         characteristics.add(characteristic);
-    }
+    }*/
 }
 

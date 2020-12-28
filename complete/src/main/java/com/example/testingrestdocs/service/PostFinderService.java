@@ -15,18 +15,21 @@ import java.util.List;
 @Service
 public class PostFinderService {
     @Autowired
-    private static PostRepository postRepository;
+    private PostRepository postRepository;
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
     private UserRepository userRepository;
 
-    public static Post createNewPost(Post post) {
-        postRepository.savePost(post);
-        return post;
+    public void createNewPost(Post post) {
+        postRepository.createPost(post);
     }
 
-    public List<Post> findByCategory(Long id) {
+    public Post getPost(Long id){
+        return postRepository.getPost(id);
+    }
+
+   /* public List<Post> findByCategory(Long id) {
         Category category = categoryRepository.findCategory(id);
         return postRepository.findPostByCategory(category);
     }
@@ -34,5 +37,5 @@ public class PostFinderService {
     public List<Post> findByUser(Long id) {
         User user = userRepository.findUser(id);
         return postRepository.findPostByUser(user);
-    }
+    }*/
 }

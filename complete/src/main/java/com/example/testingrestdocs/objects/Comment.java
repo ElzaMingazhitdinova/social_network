@@ -5,12 +5,22 @@ import java.util.Date;
 public class Comment {
     private Long id;
     public String text;
-    private Date dateTime;
+    private Date date;
+    private Long postid;
 
-    public Comment(Long id, String text, Date dateTime) {
+    public Long getPostid() {
+        return postid;
+    }
+
+    public void setPostid(Long postid) {
+        this.postid = postid;
+    }
+
+    public Comment(Long id, String text, Date date, Long postid) {
         this.id = id;
         this.text = text;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.postid = postid;
     }
 
     public Long getId() {
@@ -22,7 +32,7 @@ public class Comment {
     }
 
     public Date getDateTime() {
-        return dateTime;
+        return date;
     }
 
     public void setId(Long id) {
@@ -33,8 +43,8 @@ public class Comment {
         this.text = text;
     }
 
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(Date date) {
+        this.date = date;
     }
 
 }

@@ -1,9 +1,12 @@
 package com.example.testingrestdocs.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.testingrestdocs.objects.Category;
+import com.example.testingrestdocs.objects.User;
+import com.example.testingrestdocs.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,12 +17,14 @@ import java.util.*;
 @RestController
 @CrossOrigin
 public class UserController {
+    @Autowired
+    private UserService userService;
+
     //html
     @GetMapping(value = "/user")
     public String userPage(@RequestParam(name = "name") String name) {
         String html = this.fileToString("/Users/ruamgeg/Downloads/gs-testing-restdocs/complete/src/main/java/com/example/testingrestdocs/html/user.html");
         return new Formatter().format(html, name).toString();
-        //return Collections.(userRepository.findUser(name));
     }
 
     @GetMapping(value = "/user/list/page")
@@ -28,8 +33,19 @@ public class UserController {
         return new Formatter().format(html, contains).toString();
     }
 
+
     //логика
-    @GetMapping(value = "/user/list")
+    @PostMapping(value = "/user/create")
+    public void createUser(@RequestBody User user) {
+        userService.addUser(user);
+    }
+
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<User> gettingUserById(@PathVariable Long id){
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
+
+        @GetMapping(value = "/user/list")
     public Map<String, Object> userList(@RequestParam(name = "contains") String contains) {
         ArrayList<String> response = new ArrayList<>(Arrays.asList("Tommy"));
 

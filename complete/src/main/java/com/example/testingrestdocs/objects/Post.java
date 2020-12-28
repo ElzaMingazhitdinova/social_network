@@ -7,48 +7,43 @@ import java.util.HashMap;
 public class Post {
     private Long id;
     private String text;
-    private User user;
-    private Date dateTime;
-    private Category category;
+    private Long userid;
+    private Date date;
+    private String material;
     //private ArrayList<String> materials;
-   // private HashMap<Characteristic, ArrayList<String>> marks;
+    // private HashMap<Characteristic, ArrayList<String>> marks;
     //public ArrayList<Comment> comments;
     private boolean blocked; // сделать проверку на то что пост заблокирован и что его ен надо воозращать
 
-    public User getUser() {
-        return user;
+    public Long getIdUser() {
+        return userid;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        this.userid = userId;
     }
 
-    public Post(Long id, User user, String text, Date dateTime, Category category, ArrayList<Comment> comments) {
-        //super(user, id, text, dateTime);
+    public Post(Long id, Long userId, String text, Date date, boolean blocked, String material) {
         this.id = id;
-        this.user = user;
+        this.userid = userId;
         this.text = text;
-        this.dateTime = dateTime;
-        this.category = category;
-      //  materials = new ArrayList<>();
-      //  marks = new HashMap<>();
-        for (Characteristic characteristic : category.getCharacteristics()) {
-       //     marks.put(characteristic, new ArrayList<>());
-        }
-        comments = new ArrayList<>();
-        blocked = false;
+        this.date = date;
+        this.blocked = false;
+        this.material = material;
     }
+    //  materials = new ArrayList<>();
+    //  marks = new HashMap<>();
+    //  for (Characteristic characteristic : category.getCharacteristics()) {
+    //     marks.put(characteristic, new ArrayList<>());
+//comments = new ArrayList<>();
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
+   /* public void setCategory(Category category) {
         for (Characteristic characteristic : this.category.getCharacteristics()) {
-        //    marks.remove(characteristic);
+            //    marks.remove(characteristic);
         }
         this.category = category;
-    }
+    }*/
 
    /*public ArrayList<String> getMaterials() {
         return materials;
@@ -118,8 +113,15 @@ public class Post {
         this.text = text;
     }
 
+    public void setMaterial() {
+        this.material = material;
+    }
+
     public Date getDatetime() {
-        return dateTime;
+        return date;
+    }
+    public String getMaterial() {
+        return material;
     }
 
     public Long getId() {
@@ -127,7 +129,7 @@ public class Post {
     }
 
     public Date getDateTime() {
-        return dateTime;
+        return date;
     }
 
     public String getText() {
